@@ -65,7 +65,7 @@ def details(uid):
 # get a dynamic parameter 'removeid'. (always a string)
 def album_info(id):
     albums = query('''
-        SELECT albums.*, songs.*
+        SELECT songs.*
         FROM albums
         LEFT JOIN songs
         ON albums.id= songs.album_id
@@ -78,7 +78,7 @@ def album_info(id):
     for row in albums:
         row = dict(row)
 
-        print(row['name'])
+        #print(row['name'])
 
         id = row['id']
 
