@@ -1,7 +1,7 @@
 from database import query
 from flask import Flask, render_template, redirect
 
-app=Flask(__name__,static_folder='static',static_url_path='')
+app = Flask(__name__, static_folder='static', static_url_path='')
 
 # artists = query('''
 # SELECT * FROM artists
@@ -16,20 +16,20 @@ ON ar.id = al.artist_id
 GROUP BY ar.name, ar.description, ar.thumbnail
 ''')
 
-artist_detail=query('''
+artist_detail = query('''
 SELECT * FROM artists
 LEFT JOIN albums
 ON artists.id = albums.artist_id
 ''')
 
 
-
 @app.get('/')
 def index():
-    return render_template('index.html', artists= artists )
+    return render_template('index.html', artists=artists)
+
 
 @app.get('/details/<int:uid>')
-# get a dynamic parameter 'removeid'. (always a string)
+# get a dynamic parameter 'uid'. (always a string)
 def details(uid):
     artists = query('''
         SELECT artists.*, albums.*, albums.thumbnail AS album_thumbnail, COUNT(songs.id) AS Total_song FROM artists
@@ -40,7 +40,7 @@ def details(uid):
         WHERE artists.id= :id
         GROUP BY albums.title''', {
         'id': uid
-        
+
     })
 
     artists_info = {}
@@ -67,13 +67,11 @@ def details(uid):
                 'title': row['title'],
                 'year_released': row['year_released'],
                 'thumbnail': row.get('album_thumbnail')
-                
+
             })
 
     artists = list(artists_info.values())
     return render_template('details.html', artist=artists[0])
-    
-        
 
 
 app.run(debug=True)
