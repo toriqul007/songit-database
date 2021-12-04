@@ -18,67 +18,14 @@ def index():
     return render_template('index.html', artists=artists)
 
 
-""" @app.get('/details/<int:detailid>')
-# get a dynamic parameter 'removeid'. (always a string)
-def details(detailid):
-
-    for artist in artists:
-        # runnig the loop method  to get all the elements
-        if artist['id'] == detailid:
-            # if randomly generated 'movie id' matches with the 'form movie id',then it removes
-            # remove elements(movie) from the list with remove() mehtod
-            return render_template('details.html', artist=artist)
-
-    # keep user on the same page
- """
-
-""" @app.get('/info')
-def info(id):
-    db_albums = query('''
-        SELECT * FROM artists
-        LEFT JOIN albums
-        ON artists.id= albums.artist_id
-        WHERE artists.id= :id''', {
-        'id': int(id)
-    })
-
-    artists = {}
-
-    for row in db_albums:
-        print(row['id'], row['name'], row['description'])
-
-        id = row['id']
-
-# create row if not exists
-        if artists.get(id) == None:
-            artists[id] = {
-                'name': row['name'],
-                'description': row['description'],
-                'albums': []
-            }
-# add album to artist (if there is a album)
-        if row['title'] != None:
-            artists[id]['albums'].append({
-                'title': row['title'],
-                'description': row['description'],
-                'year_released': row['year_released']
-            })
-
-            return render_template('info.html', artist=db_albums)
- """
-
-
 @app.get('/details/<int:uid>')
 # get a dynamic parameter 'removeid'. (always a string)
 def details(uid):
     artists = query('''
-        SELECT artists.*, albums.*,albums.id AS album_id,albums.thumbnail AS album_thumbnail, 
-        SUM(songs.duration/60) AS album_duration_min, COUNT(songs.id) AS song_numbers FROM artists
+        SELECT artists.*, albums.*,albums.id AS album_id,  albums.thumbnail AS album_thumbnail FROM artists
         LEFT JOIN albums
         ON artists.id= albums.artist_id
-        JOIN songs
-        ON albums.id= songs.album_id
-        WHERE artists.id=id''', {
+        WHERE artists.id= :id''', {
         'id': uid
     })
 
