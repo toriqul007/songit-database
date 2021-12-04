@@ -7,17 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
     <link rel="stylesheet" href="/styles.css">
-    <title>Details</title>
+    <title>Album Details</title>
 </head>
 
 <body>
-    <h1> Artist Details</h1>
+    <h1> Album Details</h1>
     <div>
-        <h4>{{artist['id']}}</h4>
-        <h4>{{artist['name']}}</h4>
-        <img src="{{artist['thumbnail']}}" alt="" id="thumbnail">
-        <b>{{artist['description']}}</b>
-        <h3>Albums: {{artist[4]}}</h3>
+        <h4>{{album['id']}}</h4>
+        <h4>{{album['title']}}</h4>
+        <h4>{{album['year_released']}}</h4>
+        <img src="{{album['thumbnail']}}" alt="" id="thumbnail">
+        <b>{{album['description']}}</b>
         <nav>
             <a class="info" href="/info/{{artist['id']}}"><button style="background: rgb(21, 83, 80)">Info</button></a>
             <br>
@@ -25,12 +25,13 @@
     </div>
 
     <h1> infos</h1>
-    {% for album in artist['albums'] %}
+    {% for song in album['songs'] %}
     <div style="width: 200px; display: inline-block;" id="movie-column">
-        <img src="{{album['thumbnail']}}" alt="" id="thumbnail">
-        <h4><b>Album : {{album['title']}}</b></h4>
+        <img src="{{song['youtube_id']}}" alt="" id="thumbnail">
+        <h4><b>Song : {{song['name']}}</b></h4>
+        <h4><b>Song : {{song['duration']}}</b></h4>
         <nav>
-            <a class="Details" href="/info/{{album['id']}}"><button style="background: rgb(21, 83, 80)"> Album
+            <a class="Details" href="/details/{{artist['id']}}"><button style="background: rgb(21, 83, 80)"> Album
                     Details</button></a>
             <br>
         </nav>

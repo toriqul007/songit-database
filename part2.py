@@ -72,10 +72,13 @@ def info(id):
 # get a dynamic parameter 'removeid'. (always a string)
 def details(uid):
     artists = query('''
-        SELECT artists.*, albums.*,albums.id AS album_id,  albums.thumbnail AS album_thumbnail FROM artists
+        SELECT artists.*, albums.*,albums.id AS album_id,albums.thumbnail AS album_thumbnail, 
+        SUM(songs.duration/60) AS album_duration_min, COUNT(songs.id) AS song_numbers FROM artists
         LEFT JOIN albums
         ON artists.id= albums.artist_id
-        WHERE artists.id= :id''', {
+        JOIN songs
+        ON albums.id= songs.album_id
+        WHERE artists.id=id''', {
         'id': uid
     })
 
