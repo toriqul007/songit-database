@@ -29,6 +29,8 @@
     <div style="width: 200px; display: inline-block;" id="movie-column">
         <img src="{{album['thumbnail']}}" alt="" id="thumbnail">
         <h4><b>Album : {{album['title']}}</b></h4>
+        <h4>Album Duration : {{album['duration']}} minutes</h4>
+        <h4>Number of songs : {{album['song_count']}}</h4>
         <nav>
             <a class="Details" href="/info/{{album['id']}}"><button style="background: rgb(21, 83, 80)"> Album
                     Details</button></a>

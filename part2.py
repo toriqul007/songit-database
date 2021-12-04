@@ -5,9 +5,11 @@ app = Flask(__name__)
 
 
 artists = query('''
-        SELECT artists.id, artists.name, artists.description, artists.thumbnail, GROUP_CONCAT(albums.title, ',  ') AS ALBUM
+        SELECT artists.id, artists.name, artists.description, artists.thumbnail, GROUP_CONCAT(albums.title, ',  ') AS ALBUM 
+        
         FROM artists, albums
         WHERE artists.id= albums.artist_id
+        
         GROUP BY artists.name, artists.description, artists.thumbnail;
     ''')
 
@@ -22,10 +24,15 @@ def index():
 # get a dynamic parameter 'removeid'. (always a string)
 def details(uid):
     artists = query('''
-        SELECT artists.*, albums.*,albums.id AS album_id,  albums.thumbnail AS album_thumbnail FROM artists
+        SELECT artists.*, albums.*, albums.id AS album_id, albums.thumbnail AS album_thumbnail, 
+        SUM(songs.duration/60) AS duration, COUNT(songs.id) AS song_count FROM artists
         LEFT JOIN albums
         ON artists.id= albums.artist_id
-        WHERE artists.id= :id''', {
+        JOIN songs
+        ON albums.id = songs.album_id
+        WHERE artists.id= :id
+        GROUP BY album_id
+        ''', {
         'id': uid
     })
 
@@ -54,7 +61,9 @@ def details(uid):
                 'id': row['id'],
                 'title': row['title'],
                 'year_released': row['year_released'],
-                'thumbnail': row.get('album_thumbnail')
+                'thumbnail': row.get('album_thumbnail'),
+                'duration' : row['duration'],
+                'song_count' : row['song_count']
             })
 
     artists = list(artists_info.values())
