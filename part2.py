@@ -38,7 +38,7 @@ def details(uid):
         JOIN songs
         ON albums.id = songs.album_id
         WHERE artists.id= :id
-        GROUP BY albums.title''', {
+        GROUP BY artists.name, albums.title''', {
         'id': uid
         
     })
@@ -75,5 +75,5 @@ def details(uid):
     
         
 
-
+# to run the flask app
 app.run(debug=True)
