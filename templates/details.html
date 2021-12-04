@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+
+
+</head>
+<body>
+    <h1>Artist Detail</h1>
+
+    <div>
+        <h3>{{artist['id']}}</h3>
+        <h3>{{artist['name']}}</h3>
+        <img src="{{artist['thumbnail']}}" alt="" class="card__image">
+        <p>{{artist['description']}}</p>
+        <h2>Albums: {{artist[4]}}</h2>
+       
+        
+    </div>
+
+    <h1>Album Details</h1>
+    {% for album in artist['albums']%}
+        <div>
+            <img src="{{album['thumbnail']}}" alt="">
+            <h3>Album: {{album['title']}}</h3>
+            <h3>Total Songs: {{album['total_song']}}</h3>
+            <nav>
+                <a class="info" href="/info/{{artist['id']}}"><button style="background: rgb(21, 83, 80)">Info</button></a>
+                <br>
+            </nav>
+        </div>
+    {%endfor%}
+</body>
+</html>
