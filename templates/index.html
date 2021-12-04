@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>music</title>
-    <!-- <link rel="stylesheet" href="styles.css"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
-</head>
-<body>
-    <h1>Singers....</h1>
 
-    <div class="cards">
-        {%for artist in artists%}
-        <div class="card">
-          
-          <div class="card__content">
-            <h3>{{artist['id']}}</h3>
-            <h2>{{artist['name']}}</h2>
-          </div>
-          <dev>
-            <a href="/details/{{artist.id}}">Details</a> 
-          </dev>
-          <img src="{{artist['thumbnail']}}" alt="" class="card__image">
-        </div>
-        {%endfor%}
-      </div>    
-    
-    
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Flask App </title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1> Favorit Artist list</h1>
+
+  <h1> Artists</h1>
+  {% for artist in artists %}
+  <div style="width: 200px; display: inline-block;" id="movie-column">
+    <h4> <img src="{{artist['thumbnail']}}" alt="" id="thumbnail"></h4>
+    <h4><b>Artist : {{artist['name']}}</b></h4>
+    <h4><b>Artist : {{artist['id']}}</b></h4>
+    <nav>
+      <a class="Details" href="/details/{{artist['id']}}"><button
+          style="background: rgb(21, 83, 80)">Details</button></a>
+      <br>
+    </nav>
+  </div>
+  {%endfor%}
+
 </body>
+
 </html>
