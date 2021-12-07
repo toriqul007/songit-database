@@ -48,6 +48,7 @@ def details(uid):
 # create row if not exists
         if artists_info.get(id) == None:
             artists_info[id] = {
+                
                 'name': row['name'],
                 'description': row['description'],
                 'thumbnail': row['thumbnail'],
@@ -58,7 +59,7 @@ def details(uid):
         if row['title'] != None:
             artists_info[id]['albums'].append({
                 # add album id
-                'id': row['id'],
+                'album_id' : row['album_id'],
                 'title': row['title'],
                 'year_released': row['year_released'],
                 'thumbnail': row.get('album_thumbnail'),
@@ -72,45 +73,65 @@ def details(uid):
 
 @app.get('/info/<int:aid>')
 # get a dynamic parameter 'removeid'. (always a string)
-def album_info(id):
-    albums = query('''
-        SELECT songs.*
-        FROM albums
-        LEFT JOIN songs
-        ON albums.id= songs.album_id
-        WHERE albums.id= :id''', {
-        'id': id
+def album_info(aid):
+
+    artists = query('''
+        SELECT artists.*, albums.*, albums.id AS album_id, albums.thumbnail AS album_thumbnail, 
+        GROUP_CONCAT(songs.name, ', ') AS song_name, songs.youtube_id,
+        SUM(songs.duration/60) AS duration, COUNT(songs.id) AS song_count FROM artists
+        LEFT JOIN albums
+        ON artists.id= albums.artist_id
+        JOIN songs
+        ON albums.id = songs.album_id
+        WHERE artists.id= :id
+        GROUP BY album_id
+        ''', {
+        'id': aid
     })
 
-    albums_info = {}
+    artists_info = {}
 
-    for row in albums:
+    for row in artists:
         row = dict(row)
 
-        #print(row['name'])
+        
 
         id = row['id']
 
 # create row if not exists
-        if albums_info.get(id) == None:
-            albums_info[id] = {
-                'title': row['title'],
+        if artists_info.get(id) == None:
+            artists_info[id] = {
+                'name': row['name'],
                 'description': row['description'],
-                'year_released': row['year_released'],
-                'thumbnail': row.get('album_thumbnail'),
-                'songs ': []
+                'thumbnail': row['thumbnail'],
+                'albums': []
             }
 
 # add album to artist (if there is a album)
         if row['title'] != None:
-            albums_info[id]['songs'].append({
+            artists_info[id]['albums'].append({
+                # add album id
+                'album_id': row['album_id'],
                 'title': row['title'],
                 'year_released': row['year_released'],
-                'thumbnail': row.get('album_thumbnail')
+                'thumbnail': row.get('album_thumbnail'),
+                'duration' : row['duration'],
+                'song_count' : row['song_count'],
+                'songs' : []
+                
             })
 
-    albums = list(albums_info.values())
-    return render_template('info.html', album=albums[0])
+        if row['youtube_id'] != None:
+            artists_info[id]['albums'][id]['songs'].append({
+            'song_name' : row['song_name']
+        })
+
+             
+
+            
+
+    albums = list(artists_info.values())
+    return render_template('info.html', artist=albums[1])
 
 
 if __name__ == '__main__':
